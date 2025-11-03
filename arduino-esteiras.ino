@@ -1,5 +1,3 @@
-#include <EEPROM.h>
-
 // pino para controlar a saída dos motores de passo da esteira principal
 #define stepPin 2
 //pino para controle de direção dos motores da esteira principal
@@ -34,7 +32,6 @@ char resposta = '3';
 String itemAnterior = "vazio";
 
 void setup() {
-  EEPROM.put(0, 0);
   pinMode(stepPin, OUTPUT);
   pinMode(dirPin, OUTPUT);
   pinMode(enablePin, OUTPUT);
@@ -156,16 +153,6 @@ void loop() {
 
         if (leituraSensor == LOW) {
           Serial.println("A:I");
-          int value = readNumberInEEpromMemory();
-
-          if (value == 0) {
-            pararMotor();
-            saveNumberInEEpromMemory(1);
-          } else {
-            saveNumberInEEpromMemory(0);
-          }
-
-          Serial.println(value);
           pararMotor();
           motorParado = true;
         } else {
@@ -217,16 +204,4 @@ void moveMotorAnteHorario() {
       delayMicroseconds(1000);
     }
   }
-}
-
-int memoryAddress = 0;
-
-void saveNumberInEEpromMemory(int number) {
-  EEPROM.put(memoryAddress, number);
-}
-
-int readNumberInEEpromMemory() {
-  int value;
-  EEPROM.get(memoryAddress, value);
-  return value;
 }
